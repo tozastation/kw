@@ -1,0 +1,2 @@
+statik:
+    statik -src=./templates
