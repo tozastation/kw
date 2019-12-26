@@ -1,6 +1,7 @@
 package kw
 
 import (
+	"fmt"
 	"github.com/google/uuid"
 	"io/ioutil"
 	"log"
@@ -34,7 +35,7 @@ func (k *Kubectl) Apply(yaml string) (string, bool) {
 	args := []string{"--kubeconfig", k.KubeConfigPath, "apply", "-f", tmpFileName}
 	result, err := exec.Command(k.BinaryPath, args...).Output()
 	if err != nil {
-		log.Printf("error: execute kubectl %v", err)
+		fmt.Printf("error: execute kubectl => %v\n", err)
 		return  string(result), false
 	}
 	return string(result), true

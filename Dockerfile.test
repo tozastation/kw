@@ -1,0 +1,30 @@
+FROM ubuntu:18.04
+# --- setup docker part ---
+RUN apt-get update -y && apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg2 \
+    software-properties-common \
+    wget \
+    git
+RUN  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+RUN add-apt-repository \
+       "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+       $(lsb_release -cs) \
+       stable"
+RUN apt-get update -y && apt-get install -y docker-ce docker-ce-cli containerd.io
+RUN service docker start && service docker status
+# --- setup kubernetes part ---
+RUN curl -Lo /usr/local/bin/kind https://github.com/kubernetes-sigs/kind/releases/download/v0.6.1/kind-$(uname)-amd64 && chmod +x /usr/local/bin/kind
+RUN kind create cluster
+RUN curl -sLo /usr/local/bin/kubectl 'https://storage.googleapis.com/kubernetes-release/release/v1.17.0/bin/linux/amd64/kubectl' && chmod +x /usr/local/bin/kubectl
+# --- setup goenv ---
+WORKDIR /tmp
+RUN wget 'https://dl.google.com/go/go1.13.5.linux-amd64.tar.gz' && tar -C /usr/local -xzf 'go1.13.5.linux-amd64.tar.gz'
+ENV PATH $PATH:/usr/local/go/bin
+# --- container service part
+ENV CGO_ENABLED=0
+WORKDIR /kw
+COPY . .
+#RUN go test ./...

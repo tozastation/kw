@@ -3,6 +3,7 @@ module github.com/tozastation/kw
 go 1.13
 
 require (
+	github.com/google/uuid v1.1.1
 	github.com/rakyll/statik v0.1.6
 	gopkg.in/yaml.v2 v2.2.7
 	k8s.io/api v0.17.0
