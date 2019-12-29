@@ -1,0 +1,13 @@
+version: "3"
+services:
+  dind:
+    container_name: dind
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    privileged: true
+    tty: true
+    volumes:
+    - .:/kw
+    #command: '/bin/ash -c kind create cluster'
+    # export KUBECONFIG="$(kind get kubeconfig-path --name="kind")"
